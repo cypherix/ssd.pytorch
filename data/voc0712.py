@@ -17,15 +17,18 @@ if sys.version_info[0] == 2:
 else:
     import xml.etree.ElementTree as ET
 
+#VOC_CLASSES = (  # always index 0
+#    'aeroplane', 'bicycle', 'bird', 'boat',
+#    'bottle', 'bus', 'car', 'cat', 'chair',
+#    'cow', 'diningtable', 'dog', 'horse',
+#    'motorbike', 'person', 'pottedplant',
+#    'sheep', 'sofa', 'train', 'tvmonitor')
+ 
 VOC_CLASSES = (  # always index 0
-    'aeroplane', 'bicycle', 'bird', 'boat',
-    'bottle', 'bus', 'car', 'cat', 'chair',
-    'cow', 'diningtable', 'dog', 'horse',
-    'motorbike', 'person', 'pottedplant',
-    'sheep', 'sofa', 'train', 'tvmonitor')
-
+    'pedestrian',)
+    
 # note: if you used our download scripts, this should be right
-VOC_ROOT = osp.join(HOME, "data/VOCdevkit/")
+VOC_ROOT = osp.join('./data', "VOCdevkit/")
 
 
 class VOCAnnotationTransform(object):
@@ -56,9 +59,9 @@ class VOCAnnotationTransform(object):
         """
         res = []
         for obj in target.iter('object'):
-            difficult = int(obj.find('difficult').text) == 1
-            if not self.keep_difficult and difficult:
-                continue
+            #difficult = int(obj.find('difficult').text) == 1
+            #if not self.keep_difficult and difficult:
+            #    continue
             name = obj.find('name').text.lower().strip()
             bbox = obj.find('bndbox')
 
@@ -69,6 +72,7 @@ class VOCAnnotationTransform(object):
                 # scale height or width
                 cur_pt = cur_pt / width if i % 2 == 0 else cur_pt / height
                 bndbox.append(cur_pt)
+            #print(self.class_to_ind)
             label_idx = self.class_to_ind[name]
             bndbox.append(label_idx)
             res += [bndbox]  # [xmin, ymin, xmax, ymax, label_ind]
@@ -95,7 +99,7 @@ class VOCDetection(data.Dataset):
     """
 
     def __init__(self, root,
-                 image_sets=[('2007', 'trainval'), ('2012', 'trainval')],
+                 image_sets=[('2012', 'trainval')],
                  transform=None, target_transform=VOCAnnotationTransform(),
                  dataset_name='VOC0712'):
         self.root = root
@@ -124,6 +128,7 @@ class VOCDetection(data.Dataset):
 
         target = ET.parse(self._annopath % img_id).getroot()
         img = cv2.imread(self._imgpath % img_id)
+        #print(self._annopath % img_id,self._imgpath % img_id)
         height, width, channels = img.shape
 
         if self.target_transform is not None:
