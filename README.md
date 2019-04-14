@@ -1,4 +1,5 @@
-# SSD: Single Shot MultiBox Object Detector, in PyTorch
+# SSD: Single Shot MultiBox Object Detector, in PyTorch (Fine tuned for training and detecting person only)
+### For person only training, open train.ipynb and change accordingly
 A [PyTorch](http://pytorch.org/) implementation of [Single Shot MultiBox Detector](http://arxiv.org/abs/1512.02325) from the 2016 paper by Wei Liu, Dragomir Anguelov, Dumitru Erhan, Christian Szegedy, Scott Reed, Cheng-Yang, and Alexander C. Berg.  The official and original Caffe code can be found [here](https://github.com/weiliu89/caffe/tree/ssd).
 
 
